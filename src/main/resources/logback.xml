@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+    <appender name="logstash" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <pattern/>
+                <timestamp/>
+                <logLevel/>
+                <loggerName/>
+                <message/>
+                <provider class="tofu.logging.TofuLoggingProvider"/>
+            </providers>
+        </encoder>
+    </appender>
+
+    <root level="debug">
+        <appender-ref ref="logstash"/>
+    </root>
+</configuration>
