@@ -24,7 +24,7 @@ class TransactionRepositoryLive(ds: DataSource)
 
   import ctx._
 
-  private val transactions = quote(query[Transaction])
+  private val transactions = quote(querySchema[Transaction]("transactions"))
 
   override def create(transaction: Transaction): IO[AppError, TransactionId] =
     run(transactions.insertValue(lift(transaction))).mapBoth(DatabaseError, _ => transaction.id).provide(dsLayer)

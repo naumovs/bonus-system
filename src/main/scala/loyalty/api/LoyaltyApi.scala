@@ -20,8 +20,12 @@ class LoyaltyApi(
         tx <- req.body.asString.map(_.fromJson[Transaction])
           .flatMap(ZIO.fromEither(_))
           .orElseFail(Response.text("Malformed request").withStatus(Status.BadRequest))
-        _ <- transactionService.processTransaction(tx).catchAll(handleErrors)
-      } yield Response.status(Status.Accepted)
+        result <- transactionService.processTransaction(tx)
+          .foldZIO(
+            error => handleErrors(error),
+            _ => ZIO.succeed(Response.status(Status.Accepted))
+          )
+      } yield result
 
 
     // Получение баланса
@@ -44,8 +48,8 @@ class LoyaltyApi(
   }
 
   private def handleErrors(error: AppError): UIO[Response] = error match {
-    case DatabaseError(_) =>
-      ZIO.succeed(Response.status(Status.InternalServerError))
+    case DatabaseError(e) =>
+      ZIO.logError(e.getMessage).as(Response.status(Status.InternalServerError))
     case TransactionExists(id) =>
       ZIO.succeed(Response.text(s"Transaction ${id.value} already exists").withStatus(Status.Conflict))
     case InvalidTransactionStatus(id) =>

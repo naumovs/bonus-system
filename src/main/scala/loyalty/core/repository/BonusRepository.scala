@@ -23,8 +23,9 @@ class BonusRepositoryLive(ds: DataSource)
   private val ctx = new PostgresZioJdbcContext(SnakeCase)
 
   import ctx._
+  import extras._
 
-  private val bonusLedger = quote(query[BonusLedgerEntry])
+  private val bonusLedger = quote(querySchema[BonusLedgerEntry]("bonus_ledger"))
 
   override def credit(entry: BonusLedgerEntry): IO[AppError, Unit] =
     run(bonusLedger.insertValue(lift(entry)))
@@ -36,9 +37,8 @@ class BonusRepositoryLive(ds: DataSource)
     lazy val now = Instant.now
     run(
       bonusLedger
-        //TODO: Вот так quill! Не хочет работать со сравнением дат... Ну что ж - чистый SQL-костыль
-        //.filter(b => b.clientId == lift(clientId) && b.expiresAt.isAfter(lift(now)))
-        .filter(b => sql"${b.clientId} = ${lift(clientId)} and ${b.expiresAt} > ${lift(now)}".asCondition)
+        .filter(b => b.clientId == lift(clientId) && b.expiresAt > lift(now))
+       // .filter(b => sql"${b.clientId} = ${lift(clientId)} and ${b.expiresAt} > ${lift(now)}".asCondition)
         .map(b => (b.points, b.expiresAt))
     ).mapBoth(DatabaseError, {
       entries =>

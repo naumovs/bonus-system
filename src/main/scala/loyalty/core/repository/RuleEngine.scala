@@ -20,7 +20,7 @@ case class RuleEngineLive(ds: DataSource) extends RuleEngine {
 
   import ctx._
 
-  private val rules = quote(query[BonusRule])
+  private val rules = quote(querySchema[BonusRule]("bonus_rules"))
 
   override def getActiveRules: IO[AppError, List[BonusRule]] =
     run(rules.filter(_.active == lift(true)))

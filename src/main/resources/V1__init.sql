@@ -1,6 +1,6 @@
-CREATE TABLE transactions (
-  id UUID PRIMARY KEY,
-  client_id UUID NOT NULL,
+CREATE table if not exists transactions (
+  id VARCHAR(36) PRIMARY KEY,
+  client_id VARCHAR(36) NOT NULL,
   amount DECIMAL(15,2) NOT NULL,
   currency VARCHAR(3) NOT NULL,
   category VARCHAR(50) NOT NULL,
@@ -9,15 +9,15 @@ CREATE TABLE transactions (
   created_at TIMESTAMP NOT NULL
 );
 
-CREATE TABLE bonus_ledger (
-  client_id UUID NOT NULL,
-  transaction_id UUID NOT NULL,
+CREATE table  if not exists bonus_ledger (
+  client_id VARCHAR(36) NOT NULL,
+  transaction_id VARCHAR(36) NOT NULL,
   points DECIMAL(15,2) NOT NULL,
   expires_at TIMESTAMP NOT NULL,
   created_at TIMESTAMP NOT NULL
 );
 
-CREATE TABLE bonus_rules (
+CREATE TABLE if not exists bonus_rules (
   id VARCHAR(50) PRIMARY KEY,
   condition JSONB NOT NULL,
   reward_type VARCHAR(20) NOT NULL,
