@@ -11,7 +11,7 @@ class LoyaltyApi(
                   bonusService: BonusService
                 ) {
 
-  val routes: Http[Any, Response, Request, Response] = Http.collectZIO[Request] {
+   private val routes: Http[Any, Response, Request, Response] = Http.collectZIO[Request] {
 
     // Создание транзакции
     //TODO: Разобраться с проверкой ошибки (Accepted всегда?)
@@ -46,6 +46,8 @@ class LoyaltyApi(
         .as(Response.ok)
         .catchAll(handleErrors)
   }
+
+  val loggedRoutes = routes @@ loggingMiddleware
 
   private def handleErrors(error: AppError): UIO[Response] = error match {
     case DatabaseError(e) =>

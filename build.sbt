@@ -19,5 +19,8 @@ libraryDependencies ++= Seq(
   "com.lihaoyi" %% "ujson" % "4.2.1",
   "tf.tofu" %% "tofu-zio2-logging" % "0.13.6",
   "tf.tofu" %% "tofu-logging-logstash-logback" % "0.13.6",
+  "tf.tofu" %% "tofu-logging-derivation" % "0.13.6",
   "org.postgresql" % "postgresql" % "42.7.4",
 )
+
+testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework")

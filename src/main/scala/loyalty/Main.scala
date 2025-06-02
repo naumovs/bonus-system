@@ -5,7 +5,7 @@ import loyalty.core.repository.{BonusRepository, RuleEngine, TransactionReposito
 import loyalty.core.service.{BonusService, TransactionService}
 import tofu.logging.zlogs.TofuZLogger
 import zio._
-import zio.config.typesafe.{FromConfigSourceTypesafe, TypesafeConfigProvider}
+import zio.config.typesafe.TypesafeConfigProvider
 import zio.http.Server
 
 object Main extends ZIOAppDefault {
@@ -18,7 +18,7 @@ object Main extends ZIOAppDefault {
 
   private val httpApp = for {
     api <- ZIO.service[LoyaltyApi]
-    _   <- Server.serve(api.routes)
+    _   <- Server.serve(api.loggedRoutes)
   } yield ()
 
   override def run: ZIO[Any, Throwable, Unit] = httpApp.provide(
