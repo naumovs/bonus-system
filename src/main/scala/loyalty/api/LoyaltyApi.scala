@@ -14,7 +14,6 @@ class LoyaltyApi(
    private val routes: Http[Any, Response, Request, Response] = Http.collectZIO[Request] {
 
     // Создание транзакции
-    //TODO: Разобраться с проверкой ошибки (Accepted всегда?)
     case req @ Method.POST -> Root / "transactions" =>
       for {
         tx <- req.body.asString.map(_.fromJson[Transaction])

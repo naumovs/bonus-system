@@ -3,22 +3,12 @@ package loyalty.config
 import zio._
 import com.typesafe.config.ConfigFactory
 
-//case class DbConfig(
-//                     url: String,
-//                     user: String,
-//                     password: String,
-//                     driver: String
-//                   )
+//case class AppConfig()
 //
 //object AppConfig {
-//  val live: ZLayer[Any, Config.Error, DbConfig] =
+//  val live: ZLayer[Any, Config.Error, AppConfig] =
 //    ZLayer(ZIO.attempt {
 //      val config = ConfigFactory.load()
-//      DbConfig(
-//        config.getString("persistence.url"),
-//        config.getString("persistence.user"),
-//        config.getString("persistence.dataSource.password"),
-//        config.getString("persistence.dataSource.driver")
-//      )
+// TODO: implement
 //    }.orElseFail(Config.Error.InvalidData(message = "Invalid config")))
 //}
